@@ -6,9 +6,16 @@ PHP Imap Parser- Simple Class
 include "imap-parser.php";
 
     try {
-
+    
+        // Create object
+         $parser  = new imap_parser();
+         
+         // Parse all message
          $messages = $parser->get_messages($server, $mailbox_account, $mailbox_password,false);
-         echo "<h1>Messages:</h1> <pre>"; print_r($messages);  echo "</pre>"; 
+         
+         // Debug
+         echo "<h1>Messages:</h1>";
+         echo "<pre>"; print_r($messages);  echo "</pre>"; 
     }
     catch (customException $e) {
       echo $e->errorMessage();
