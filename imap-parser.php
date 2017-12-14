@@ -52,10 +52,11 @@ class imap_parser {
                                         (
                                             [0] => Array
                                                 (
-                                                    [from] => youremail@yourdomain.com
-                                                    [fromaddress] => VOUSYS
-                                                    [to] => youremail
+                                                    [fromaddress] => youremail@yourdomain.com
+                                                    [from] => YOURNAME
+                                                    [to] => youremail@yourdomain.com
                                                     [subject] => Fwd: Dni
+                                                    [body] => bla bla bla  
                                                     [message_id] => <093c2eda-ac3a-44b5-bdec-585f45e3b754@Spark>
                                                     [date] => 1511983968
                                                     [attachs] => Array
@@ -123,12 +124,13 @@ class imap_parser {
     * @return $attachs[] 
                                            [0] => Array
                                                 (
-                                                    [from] => youremail@yourdomain.com
-                                                    [fromaddress] => VOUSYS
+                                                    [fromaddress] => youremail@yourdomain.com
+                                                    [from] => YOURNAME
                                                     [to] => youremail
                                                     [subject] => Fwd: Dni
                                                     [message_id] => <093c2eda-ac3a-44b5-bdec-585f45e3b754@Spark>
                                                     [date] => 1511983968
+                                                    [body] => bla bla bla  
                                                     [attachs] => Array ()
                                                 )
     * @access public
@@ -142,8 +144,8 @@ class imap_parser {
             //print_r($header);
 
             // GET INFO
-            $message['from']        = $header->from[0]->mailbox.'@'.$header->from[0]->host;
-            $message['fromaddress'] = $header->from[0]->personal;
+            $message['fromaddress'] = $header->from[0]->mailbox.'@'.$header->from[0]->host;
+            $message['from']        = $header->from[0]->personal;
             $message['to']          = $header->to[0]->mailbox;
             $message['subject']     = $header->subject;
             $message['message_id']  = $header->message_id;
@@ -154,6 +156,15 @@ class imap_parser {
             $to                     = $message['to'];
             $subject                = $message['subject'];
 
+            //get message body
+            $body = (imap_fetchbody($this->imap_obj, $message_num,1.1)); 
+            if($body == '') $body = (imap_fetchbody($this->imap_obj, $message_num,1));
+             
+            $message['body']        =  quoted_printable_decode($body); 
+ 
+
+
+        
             if ($this->debug) {
                 echo $from_email . '</br>';
                 echo $to . '</br>';
